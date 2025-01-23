@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank App</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            height: 60px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header img {
+            height: 40px;
+        }
+
+        header .icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        header .icons img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        /* Saldo Principal */
+        .saldo {
+            background: linear-gradient(90deg, #4caf50, #81c784);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .saldo h1 {
+            margin: 0;
+            font-size: 1.5em;
+            font-weight: 300;
+        }
+
+        .saldo .valor {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .saldo button {
+            margin-top: 10px;
+            padding: 5px 15px;
+            background-color: white;
+            color: #4caf50;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .saldo button:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Ações Rápidas */
+        .acoes {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .acao {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .acao img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+
+        .acao span {
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        /* Movimentações Recentes */
+        .movimentacoes {
+            margin-top: 10px;
+            padding: 0 20px;
+        }
+
+        .movimentacoes h2 {
+            margin: 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .movimentacao {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .movimentacao .detalhes {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .movimentacao .detalhes img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .movimentacao .detalhes div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .movimentacao .valor {
+            font-weight: bold;
+        }
+
+        .movimentacao .valor.negativo {
+            color: red;
+        }
+
+        .movimentacao .valor.positivo {
+            color: green;
+        }
+
+        /* Menu Inferior */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        footer .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8em;
+            color: #757575;
+            cursor: pointer;
+        }
+
+        footer .menu-item img {
+            width: 24px;
+            height: 24px;
+        }
+
+        footer .menu-item.active {
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <img src="logo.png" alt="Logo">
+        <div class="icons">
+            <img src="notification-icon.png" alt="Notificações">
+            <img src="profile-icon.png" alt="Perfil">
+        </div>
+    </header>
+
+    <!-- Saldo -->
+    <div class="saldo">
+        <h1>Olá, Pedro!</h1>
+        <div class="valor">R$ 1.250,00</div>
+        <button>Esconder Saldo</button>
+    </div>
+
+    <!-- Ações Rápidas -->
+    <div class="acoes">
+        <div class="acao">
+            <img src="transfer-icon.png" alt="Transferir">
+            <span>Transferir</span>
+        </div>
+        <div class="acao">
+            <img src="pay-icon.png" alt="Pagar">
+            <span>Pagar</span>
+        </div>
+        <div class="acao">
+            <img src="deposit-icon.png" alt="Depositar">
+            <span>Depositar</span>
+        </div>
+        <div class="acao">
+            <img src="statement-icon.png" alt="Extrato">
+            <span>Extrato</span>
+        </div>
+    </div>
+
+    <!-- Movimentações Recentes -->
+    <div class="movimentacoes">
+        <h2>Movimentações Recentes</h2>
+        <div class="movimentacao">
+            <div class="detalhes">
+                <img src="arrow-down.png" alt="Ícone">
+                <div>
+                    <span>Pagamento de Boleto</span>
+                    <small>10/01/2025</small>
+                </div>
+            </div>
+            <div class="valor negativo">-R$ 150,00</div>
+        </div>
+        <div class="movimentacao">
+            <div class="detalhes">
+                <img src="arrow-up.png" alt="Ícone">
+                <div>
+                    <span>Transferência Recebida</span>
+                    <small>09/01/2025</small>
+                </div>
+            </div>
+            <div class="valor positivo">+R$ 200,00</div>
+        </div>
+    </div>
+
+    <!-- Menu Inferior -->
+    <footer>
+        <div class="menu-item active">
+            <img src="home-icon.png" alt="Home">e
+            <span>Home</span>
+        </div>
+        <div class="menu-item">
+            <img src="card-icon.png" alt="Cartões">
+            <span>Cartões</span>
+        </div>
+        <div class="menu-item">
+            <img src="investments-icon.png" alt="Investimentos">
+            <span>Investimentos</span>
+        </div>
+        <div class="menu-item">
+            <img src="profile-icon.png" alt="Perfil">
+            <span>Perfil</span>
+        </div>
+    </footer>
+</body>
+</html>
