@@ -4,6 +4,7 @@ import { TextInput, Button, Text } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from 'axios';  // Importando o axios
 
 const signUpSchema = yup.object().shape({
   cpf: yup.string().length(11, "CPF deve conter 11 dígitos").required("CPF é obrigatório"),
@@ -28,6 +29,14 @@ const SignUpScreen = () => {
 
   const onSubmit = (data) => {
     console.log("Dados cadastrados:", data);
+    // Enviando os dados para o backend
+    axios.post('http://localhost:3000/register', data)
+      .then(response => {
+        console.log('Resposta do backend', response.data);
+      })
+      .catch(error => {
+        console.log('Erro ao cadastrar', error);
+      });
   };
 
   return (
