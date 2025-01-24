@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { TextInput, Button, Text } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import axios from 'axios';  // Importando o axios
+import axios from 'axios';
 
 const signUpSchema = yup.object().shape({
   cpf: yup.string().length(11, "CPF deve conter 11 dígitos").required("CPF é obrigatório"),
@@ -23,9 +23,10 @@ const signUpSchema = yup.object().shape({
 });
 
 const SignUpScreen = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const { control, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: yupResolver(signUpSchema),
   });
+  const [statusMessage, setStatusMessage] = useState('');
 
   const onSubmit = (data) => {
     console.log("Dados cadastrados:", data);
@@ -33,9 +34,12 @@ const SignUpScreen = () => {
     axios.post('http://localhost:3000/register', data)
       .then(response => {
         console.log('Resposta do backend', response.data);
+        setStatusMessage("Cadastro realizado com sucesso!"); // Mensagem de sucesso
+        reset(); // Limpa o formulário
       })
       .catch(error => {
         console.log('Erro ao cadastrar', error);
+        setStatusMessage("Erro ao processar cadastro, tente novamente."); // Mensagem de erro
       });
   };
 
@@ -69,6 +73,9 @@ const SignUpScreen = () => {
         </Text>
       ))}
 
+      {/* Exibe a mensagem de sucesso ou erro */}
+      {statusMessage && <Text style={styles.statusMessage}>{statusMessage}</Text>}
+
       <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>
         Cadastrar
       </Button>
@@ -82,6 +89,7 @@ const styles = StyleSheet.create({
   input: { marginBottom: 10 },
   button: { marginTop: 20 },
   error: { color: "red", fontSize: 12, marginBottom: 5 },
+  statusMessage: { marginTop: 10, fontSize: 16, textAlign: "center", color: 'green' }, // Estilo para a mensagem
 });
 
 export default SignUpScreen;

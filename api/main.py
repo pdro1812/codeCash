@@ -1,33 +1,34 @@
 from fastapi import FastAPI, HTTPException
-from database import get_collection
+from pydantic import BaseModel
+from database import get_collection  # Supondo que essa função esteja correta
 from bson import ObjectId
 
 app = FastAPI()
 
+# Obtém a coleção do MongoDB
 collection = get_collection("pessoasFisicas")
 
-@app.get("/")
+class PessoaFisica(BaseModel):
+    cpf: str
+    name: str
+    rg: str
+    phone: str
+    email: str
+    password: str
+
+@app.get("/api/")
 def home():
-    return{"message": "bem vindo"} 
+    return {"message": "bem vindo"}
 
-@app.post("/itens/")
-def create_item(item: dict):
-    result = collection.insert_one(item)
-    return{"message": "iten inserido com sucesso", "id": str(result.inserted_id)}
-
-@app.get("/itens/{item_id}")
-def get_item(item_id: str):
+@app.post("/api/register/")
+async def criar_pessoa_fisica(pessoa: PessoaFisica):
     try:
-        item = collection.find_one({"_id": ObjectId(item_id)})
-        if not item:
-            raise HTTPException(status_code=404, detail="Item não encontrado")
-        return {"nome": item.get("nome")}
-    except Exception:
-        raise HTTPException(status_code=400, detail="ID inválido")
-    
-@app.delete
-def delete_iten(item_id: str):
-    result = collection.delete_one({"_id": item_id})
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="item nao encotrado")
-    return {"message": "item deletado com sucesso"}
+        # Converte o modelo Pydantic para dicionário
+        pessoa_dict = pessoa.dict()
+
+        # Insere no MongoDB
+        pessoa_id = collection.insert_one(pessoa_dict).inserted_id
+
+        return {"message": "Pessoa física criada com sucesso!", "id": str(pessoa_id)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erro ao criar pessoa física: {e}")
