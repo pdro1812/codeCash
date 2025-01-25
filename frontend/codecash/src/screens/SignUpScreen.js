@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
-import { TextInput, Button, Text } from "react-native-paper";
+import { TextInput, Button, Text, IconButton } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
+import { useNavigation } from "@react-navigation/native";
 
 const signUpSchema = yup.object().shape({
   cpf: yup.string().length(11, "CPF deve conter 11 dígitos").required("CPF é obrigatório"),
@@ -27,6 +28,7 @@ const SignUpScreen = () => {
     resolver: yupResolver(signUpSchema),
   });
   const [statusMessage, setStatusMessage] = useState('');
+  const navigation = useNavigation();
 
   const onSubmit = (data) => {
     console.log("Dados cadastrados:", data);
@@ -42,6 +44,19 @@ const SignUpScreen = () => {
         setStatusMessage("Erro ao processar cadastro, tente novamente."); // Mensagem de erro
       });
   };
+
+  // Adicionando o botão de 'Login' no canto superior direito
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconButton
+          icon="login"
+          size={24}
+          onPress={() => navigation.navigate('LoginScreen')}
+        />
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -73,7 +88,6 @@ const SignUpScreen = () => {
         </Text>
       ))}
 
-      {/* Exibe a mensagem de sucesso ou erro */}
       {statusMessage && <Text style={styles.statusMessage}>{statusMessage}</Text>}
 
       <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>

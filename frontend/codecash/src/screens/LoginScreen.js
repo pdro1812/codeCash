@@ -1,23 +1,59 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import { TextInput, Button, Text } from "react-native-paper";
+import React, { useLayoutEffect } from "react";
+import { View, StyleSheet, Alert } from "react-native";
+import { TextInput, Button, Text, IconButton } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+
 
 const loginSchema = yup.object().shape({
-  email: yup.string().email("Formato de email inválido").required("Email é obrigatório"),
+  email: yup
+    .string()
+    .email("Formato de email inválido")
+    .required("Email é obrigatório"),
   password: yup.string().required("Senha é obrigatória"),
 });
 
 const LoginScreen = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const navigation = useNavigation();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log("Login enviado:", data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post('http://localhost:3000/login', {
+        email: data.email,
+        password: data.password
+      });
+
+      // Navega para a HomeScreen após login bem-sucedido
+      navigation.navigate('HomeScreen');
+    } catch (error) {
+      console.error('Erro de login:', error.response ? error.response.data : error.message);
+      Alert.alert('Erro', error.response?.data?.error || 'Erro ao fazer login');
+    }
   };
+
+  // Adicionando o botão de 'SignUp' no canto superior direito
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconButton
+          icon="account-plus"
+          size={24}
+          onPress={() => navigation.navigate('SignScreen')}
+        />
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -56,7 +92,11 @@ const LoginScreen = () => {
       />
       {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}
 
-      <Button mode="contained" onPress={handleSubmit(onSubmit)} style={styles.button}>
+      <Button
+        mode="contained"
+        onPress={handleSubmit(onSubmit)}
+        style={styles.button}
+      >
         Entrar
       </Button>
     </View>
